@@ -5,13 +5,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class Member {
     @Id
-    private Long memberID;
+    private String memberID;
     private String memberName;
     private String profile;
     private String provider; // google, kakao
