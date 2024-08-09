@@ -13,10 +13,10 @@ import java.util.UUID;
 public class ChatRoom {
     @Id
     private String roomID;
-    private Long landlordID;
-    private Long tenantID;
+    private String landlordID;
+    private String tenantID;
 
-    public ChatRoom(Long landlordID, Long tenantID) {
+    public ChatRoom(String landlordID, String tenantID) {
         this.roomID = UUID.randomUUID().toString();
         this.landlordID = landlordID;
         this.tenantID = tenantID;

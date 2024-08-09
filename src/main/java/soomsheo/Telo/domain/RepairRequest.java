@@ -3,6 +3,7 @@ package soomsheo.Telo.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.UUID;
@@ -11,21 +12,27 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 public class RepairRequest {
+    public enum RepairState{
+        NONE, REFUSAL, APPROVAL, UNDER_REPAIR, CLAIM, COMPLETE
+    }
+
     @Id
     private String requestID;
 
-    private Long landlordID;
-    private Long tenantID;
+    private String landlordID;
+    private String tenantID;
     private String requestTitle;
     private String requestContent;
 
     private Long estimateValue;
+    @Setter
+    private RepairState repairState;
 
     @ElementCollection
     @CollectionTable(name = "repair_request_images", joinColumns = @JoinColumn(name = "request_id"))
     private List<String> imageURL;
 
-    public RepairRequest(Long landlordID, Long tenantID, String requestTitle, String requestContent, List<String> imageURL, Long estimateValue) {
+    public RepairRequest(String landlordID, String tenantID, String requestTitle, String requestContent, List<String> imageURL, Long estimateValue) {
         this.requestID = UUID.randomUUID().toString();
         this.landlordID = landlordID;
         this.tenantID = tenantID;
@@ -33,6 +40,6 @@ public class RepairRequest {
         this.requestContent = requestContent;
         this.imageURL = imageURL;
         this.estimateValue = estimateValue;
+        this.repairState = RepairState.NONE;
     }
-
 }

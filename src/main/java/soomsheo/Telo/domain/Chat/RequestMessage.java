@@ -19,7 +19,7 @@ public class RequestMessage extends ChatMessage {
     @JoinColumn(name = "repair_request_id")
     private RepairRequest repairRequest;
 
-    public RequestMessage (String roomID, Long senderID, RepairRequest repairRequest, LocalDateTime sendDate){
+    public RequestMessage (String roomID, String senderID, RepairRequest repairRequest, LocalDateTime sendDate){
         super(roomID, senderID, sendDate, MessageType.REPAIR_REQUEST);
         this.repairRequest = repairRequest;
     }

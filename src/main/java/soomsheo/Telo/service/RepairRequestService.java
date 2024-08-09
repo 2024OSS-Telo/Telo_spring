@@ -24,6 +24,5 @@ public class RepairRequestService {
 
     public void createRequest(RepairRequest repairRequest) {
         repairRequestRepository.save(repairRequest);
-        chatService.sendRequestMessage(repairRequest);
     }
 }

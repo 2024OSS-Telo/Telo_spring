@@ -21,14 +21,14 @@ public class ChatMessage {
     private Long messageID;
 
     private String roomID;
-    private Long senderID;
+    private String senderID;
     private LocalDateTime sendDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "message_type", insertable=false, updatable=false)
     private MessageType messageType;
 
-    public ChatMessage(String roomID, Long senderID, LocalDateTime sendDate, MessageType messageType) {
+    public ChatMessage(String roomID, String senderID, LocalDateTime sendDate, MessageType messageType) {
         this.roomID = roomID;
         this.senderID = senderID;
         this.sendDate = sendDate;
