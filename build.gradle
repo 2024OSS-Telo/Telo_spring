@@ -28,8 +28,6 @@ dependencies {
 	annotationProcessor('org.projectlombok:lombok')
 	// WebSocket
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
-	// STOMP
-	implementation 'org.webjars:stomp-websocket:2.3.4'
 	// sockJS
 	implementation 'org.webjars:sockjs-client:1.5.1'
 	// JPA

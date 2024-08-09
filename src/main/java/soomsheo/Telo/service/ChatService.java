@@ -24,8 +24,12 @@ public class ChatService {
         this.chatRoomRepository = chatRoomRepository;
     }
 
-    public List<ChatRoom> getChatRoomList() {
-        return chatRoomRepository.findAll();
+    public List<ChatRoom> getChatRoomList(String memberID) {
+        return chatRoomRepository.findByLandlordIDOrTenantID(memberID, memberID);
+    }
+
+    public List<ChatMessage> getChatMessages(String roomID) {
+        return chatMessageRepository.findByRoomID(roomID);
     }
 
     @Transactional
@@ -36,18 +40,18 @@ public class ChatService {
     }
 
     @Transactional
-    public ChatMessage sendTextMessage(String roomID, Long senderID, String message) {
+    public ChatMessage sendTextMessage(String roomID, String senderID, String message) {
         ChatMessage chatMessage = new TextMessage(roomID, senderID, message, LocalDateTime.now());
         return chatMessageRepository.save(chatMessage);
     }
 
     @Transactional
-    public ChatMessage sendPhotoMessage(String roomID, Long senderID, String photoURL) {
+    public ChatMessage sendPhotoMessage(String roomID, String senderID, String photoURL) {
         ChatMessage chatMessage = new PhotoMessage(roomID, senderID, photoURL, LocalDateTime.now());
         return chatMessageRepository.save(chatMessage);
     }
 
-    public String getOrCreateChatRoom(Long landlordID, Long tenantID) {
+    public String getOrCreateChatRoom(String landlordID, String tenantID) {
         Optional<ChatRoom> chatRoomOpt = chatRoomRepository.findByLandlordIDAndTenantID(landlordID, tenantID);
         if (chatRoomOpt.isEmpty()){
             ChatRoom chatRoom = new ChatRoom(landlordID, tenantID);
@@ -57,4 +61,5 @@ public class ChatService {
         else
             return chatRoomOpt.get().getRoomID();
     }
+
 }
