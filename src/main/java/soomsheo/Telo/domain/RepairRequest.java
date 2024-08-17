@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,23 +24,39 @@ public class RepairRequest {
     private String tenantID;
     private String requestTitle;
     private String requestContent;
+    private String claimContent;
 
-    private Long estimateValue;
+    private Long estimatedValue;
+    private Long actualValue;
+
+    private LocalDateTime createdDate;
+
     @Setter
     private RepairState repairState;
 
     @ElementCollection
     @CollectionTable(name = "repair_request_images", joinColumns = @JoinColumn(name = "request_id"))
     private List<String> imageURL;
+    @ElementCollection
+    @CollectionTable(name = "repair_request_receipt_images", joinColumns = @JoinColumn(name = "request_id"))
+    private List<String> receiptImageURL;
 
-    public RepairRequest(String landlordID, String tenantID, String requestTitle, String requestContent, List<String> imageURL, Long estimateValue) {
+    public RepairRequest(String landlordID, String tenantID, String requestTitle, String requestContent, List<String> imageURL, Long estimatedValue) {
         this.requestID = UUID.randomUUID().toString();
         this.landlordID = landlordID;
         this.tenantID = tenantID;
         this.requestTitle = requestTitle;
         this.requestContent = requestContent;
         this.imageURL = imageURL;
-        this.estimateValue = estimateValue;
+        this.estimatedValue = estimatedValue;
         this.repairState = RepairState.NONE;
+        this.createdDate = LocalDateTime.now();
+    }
+
+    public void updateClaim(Long actualValue, List<String> receiptImageURL, String claimContent) {
+        this.actualValue = actualValue;
+        this.receiptImageURL = receiptImageURL;
+        this.claimContent = claimContent;
+        this.repairState = RepairState.CLAIM;
     }
 }

@@ -5,10 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import soomsheo.Telo.domain.Chat.ChatRoom;
 import soomsheo.Telo.domain.RepairRequest;
 import soomsheo.Telo.repository.RepairRequestRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RepairRequestService {
@@ -22,7 +24,31 @@ public class RepairRequestService {
     }
 
 
-    public void createRequest(RepairRequest repairRequest) {
+    public void createRepairRequest(RepairRequest repairRequest) {
         repairRequestRepository.save(repairRequest);
+    }
+
+    public void updateClaim(String requestID, Long actualValue, List<String> receiptImageURL, String claimContent) {
+        Optional<RepairRequest> optionalRepairRequest = repairRequestRepository.findById(requestID);
+
+        if (optionalRepairRequest.isPresent()) {
+            RepairRequest repairRequest = optionalRepairRequest.get();
+            repairRequest.updateClaim(actualValue, receiptImageURL, claimContent);
+            repairRequestRepository.save(repairRequest);
+        }
+    }
+
+    public void updateRepairState(String requestID, RepairRequest.RepairState repairState) {
+        Optional<RepairRequest> optionalRepairRequest = repairRequestRepository.findById(requestID);
+
+        if (optionalRepairRequest.isPresent()) {
+            RepairRequest repairRequest = optionalRepairRequest.get();
+            repairRequest.setRepairState(repairState);
+            repairRequestRepository.save(repairRequest);
+        }
+    }
+
+    public List<RepairRequest> getRepairRequestList(String memberID) {
+        return repairRequestRepository.findByTenantID(memberID);
     }
 }
