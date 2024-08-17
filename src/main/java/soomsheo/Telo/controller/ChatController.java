@@ -30,9 +30,9 @@ public class ChatController {
         this.repairRequestService = repairRequestService;
     }
 
-    @GetMapping("/rooms/{userID}")
-    public List<ChatRoom> getChatRoomList(@PathVariable String userID) {
-        return chatService.getChatRoomList(userID);
+    @GetMapping("/rooms/{memberID}")
+    public List<ChatRoom> getChatRoomList(@PathVariable String memberID) {
+        return chatService.getChatRoomList(memberID);
     }
 
     @GetMapping("/{roomID}/messages")
