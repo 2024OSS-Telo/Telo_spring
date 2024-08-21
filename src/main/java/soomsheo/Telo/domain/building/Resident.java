@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import soomsheo.Telo.domain.Member;
+import soomsheo.Telo.util.EncryptionUtil;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -22,11 +23,13 @@ public class Resident {
     private UUID residentID;
 
     private String residentName;
-    private String phoneNumber;
+    private String encryptedPhoneNumber;
     private String apartmentNumber;
-    //1이 전세, 2이 월세
-    private int rentType;
-    private String rentPaymentDate;
+    private String rentType;
+    private String monthlyRentAmount;
+    private String monthlyRentPaymentDate;
+    private String deposit;
+    private String contractExpirationDate;
 
     @ManyToOne
     @JoinColumn(name = "building_id", nullable = false)
@@ -37,30 +40,26 @@ public class Resident {
     @Column(name = "contract_image_url")
     private List<String> contractImageURL;
 
-    public Resident(String residentName, String phoneNumber, String apartmentNumber, int rentType,
-                    String rentPaymentDate, Building building, List<String> contractImageURL) throws NoSuchAlgorithmException {
+    public Resident(String residentName, String phoneNumber, String apartmentNumber, String rentType, String monthlyRentAmount,
+                    String monthlyRentPaymentDate, String deposit, String contractExpirationDate,Building building, List<String> contractImageURL) throws Exception {
         this.residentID = UUID.randomUUID();
         this.residentName = residentName;
-        this.phoneNumber = hashPhoneNumber(phoneNumber);
+        this.encryptedPhoneNumber = EncryptionUtil.encrypt(phoneNumber);
         this.apartmentNumber = apartmentNumber;
         this.rentType = rentType;
-        this.rentPaymentDate = rentPaymentDate;
+        this.monthlyRentAmount = monthlyRentAmount;
+        this.monthlyRentPaymentDate = monthlyRentPaymentDate;
+        this.deposit = deposit;
+        this.contractExpirationDate = contractExpirationDate;
         this.building = building;
         this.contractImageURL = contractImageURL;
     }
 
-    private String hashPhoneNumber(String address) throws NoSuchAlgorithmException {
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] hash = digest.digest(address.getBytes(StandardCharsets.UTF_8));
+    public String getPhoneNumber() throws Exception {
+        return EncryptionUtil.decrypt(this.encryptedPhoneNumber);
+    }
 
-        StringBuilder hexString = new StringBuilder();
-        for (byte b : hash) {
-            String hex = Integer.toHexString(0xff & b);
-            if (hex.length() == 1) {
-                hexString.append('0');
-            }
-            hexString.append(hex);
-        }
-        return hexString.toString();
+    public void setPhoneNumber(String phoneNumber) throws Exception {
+        this.encryptedPhoneNumber = EncryptionUtil.encrypt(phoneNumber);
     }
 }

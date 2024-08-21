@@ -16,9 +16,11 @@ public class ResidentResisterDTO {
     private String residentName;
     private String phoneNumber;
     private String apartmentNumber;
-    //1이 전세, 2이 월세
-    private int rentType;
-    private String rentPaymentDate;
+    private String rentType;
+    private String monthlyRentAmount;
+    private String monthlyRentPaymentDate;
+    private String deposit;
+    private String contractExpirationDate;
     private UUID buildingID;
     private List<String> contractImageURL;
 }
