@@ -33,22 +33,27 @@ public class ChatService {
     }
 
     @Transactional
-    public ChatMessage sendRequestMessage(RepairRequest repairRequest) {
+    public ChatMessage saveRequestMessage(RepairRequest repairRequest) {
         String roomID = getOrCreateChatRoom(repairRequest.getLandlordID(), repairRequest.getTenantID());
         ChatMessage chatMessage = new RequestMessage(roomID, repairRequest.getTenantID(), repairRequest, LocalDateTime.now());
         return chatMessageRepository.save(chatMessage);
     }
 
     @Transactional
-    public ChatMessage sendTextMessage(String roomID, String senderID, String message) {
+    public ChatMessage saveTextMessage(String roomID, String senderID, String message) {
         ChatMessage chatMessage = new TextMessage(roomID, senderID, message, LocalDateTime.now());
         return chatMessageRepository.save(chatMessage);
     }
 
     @Transactional
-    public ChatMessage sendPhotoMessage(String roomID, String senderID, String photoURL) {
+    public ChatMessage savePhotoMessage(String roomID, String senderID, String photoURL) {
         ChatMessage chatMessage = new PhotoMessage(roomID, senderID, photoURL, LocalDateTime.now());
         return chatMessageRepository.save(chatMessage);
+    }
+
+    @Transactional
+    public ChatMessage saveNoticeMessage(NoticeMessage noticeMessage) {
+        return chatMessageRepository.save(noticeMessage);
     }
 
     public String getOrCreateChatRoom(String landlordID, String tenantID) {
@@ -61,5 +66,6 @@ public class ChatService {
         else
             return chatRoomOpt.get().getRoomID();
     }
+
 
 }

@@ -14,7 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class RepairRequest {
     public enum RepairState{
-        NONE, REFUSAL, APPROVAL, UNDER_REPAIR, CLAIM, COMPLETE
+        NONE, REFUSAL, UNDER_REPAIR, CLAIM, COMPLETE
     }
 
     @Id
@@ -30,6 +30,8 @@ public class RepairRequest {
     private Long actualValue;
 
     private LocalDateTime createdDate;
+
+    private String refusalReason;
 
     @Setter
     private RepairState repairState;
@@ -58,5 +60,10 @@ public class RepairRequest {
         this.receiptImageURL = receiptImageURL;
         this.claimContent = claimContent;
         this.repairState = RepairState.CLAIM;
+    }
+
+    public void updateRefusalReason(String refusalReason) {
+        this.refusalReason = refusalReason;
+        this.repairState = RepairState.REFUSAL;
     }
 }
