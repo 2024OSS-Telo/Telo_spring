@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import soomsheo.Telo.domain.building.Building;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,6 +22,10 @@ public class ResidentResisterDTO {
     private String monthlyRentPaymentDate;
     private String deposit;
     private String contractExpirationDate;
-    private UUID buildingID;
+    private Building building;
     private List<String> contractImageURL;
+
+    public UUID getBuildingID() {
+        return building.getBuildingID();
+    }
 }

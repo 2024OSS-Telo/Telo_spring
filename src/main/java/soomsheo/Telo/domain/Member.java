@@ -6,6 +6,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import soomsheo.Telo.util.EncryptionUtil;
 
 @Entity
 @Getter
@@ -14,8 +15,19 @@ import lombok.Setter;
 public class Member {
     @Id
     private String memberID;
-    private String memberName;
+    private String memberRealName;
+    private String memberNickName;
+    private String encryptedPhoneNumber;
     private String profile;
     private String provider; // google, kakao
     private String memberType; // landlord, tenant
+
+    public String getPhoneNumber() throws Exception {
+        return EncryptionUtil.decrypt(this.encryptedPhoneNumber);
+    }
+
+    public void setPhoneNumber(String phoneNumber) throws Exception {
+        this.encryptedPhoneNumber = EncryptionUtil.encrypt(phoneNumber);
+    }
+
 }

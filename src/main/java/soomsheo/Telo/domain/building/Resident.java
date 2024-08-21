@@ -22,14 +22,16 @@ public class Resident {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID residentID;
 
-    private String residentName;
-    private String encryptedPhoneNumber;
     private String apartmentNumber;
     private String rentType;
     private String monthlyRentAmount;
     private String monthlyRentPaymentDate;
     private String deposit;
     private String contractExpirationDate;
+
+    @ManyToOne
+    @JoinColumn(name = "tenant_id", nullable = false)
+    private Member tenant;
 
     @ManyToOne
     @JoinColumn(name = "building_id", nullable = false)
@@ -40,11 +42,9 @@ public class Resident {
     @Column(name = "contract_image_url")
     private List<String> contractImageURL;
 
-    public Resident(String residentName, String phoneNumber, String apartmentNumber, String rentType, String monthlyRentAmount,
+    public Resident(Member tenant, String apartmentNumber, String rentType, String monthlyRentAmount,
                     String monthlyRentPaymentDate, String deposit, String contractExpirationDate,Building building, List<String> contractImageURL) throws Exception {
         this.residentID = UUID.randomUUID();
-        this.residentName = residentName;
-        this.encryptedPhoneNumber = EncryptionUtil.encrypt(phoneNumber);
         this.apartmentNumber = apartmentNumber;
         this.rentType = rentType;
         this.monthlyRentAmount = monthlyRentAmount;
@@ -52,14 +52,15 @@ public class Resident {
         this.deposit = deposit;
         this.contractExpirationDate = contractExpirationDate;
         this.building = building;
+        this.tenant = tenant;
         this.contractImageURL = contractImageURL;
     }
 
-    public String getPhoneNumber() throws Exception {
-        return EncryptionUtil.decrypt(this.encryptedPhoneNumber);
-    }
-
-    public void setPhoneNumber(String phoneNumber) throws Exception {
-        this.encryptedPhoneNumber = EncryptionUtil.encrypt(phoneNumber);
-    }
+//    public String getPhoneNumber() throws Exception {
+//        return EncryptionUtil.decrypt(this.encryptedPhoneNumber);
+//    }
+//
+//    public void setPhoneNumber(String phoneNumber) throws Exception {
+//        this.encryptedPhoneNumber = EncryptionUtil.encrypt(phoneNumber);
+//    }
 }
