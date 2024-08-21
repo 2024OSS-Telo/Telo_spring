@@ -19,6 +19,6 @@ public class BuildingResisterDTO {
     private int numberOfHouseholds;
     private int numberOfRentedHouseholds;
     private List<String> imageURL;
-    private String memberID;
+    private String landlordID;
     private String notice;
 }

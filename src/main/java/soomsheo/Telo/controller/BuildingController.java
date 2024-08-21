@@ -2,13 +2,10 @@ package soomsheo.Telo.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import soomsheo.Telo.domain.building.Building;
-import soomsheo.Telo.domain.building.Resident;
 import soomsheo.Telo.dto.BuildingResisterDTO;
 import soomsheo.Telo.dto.NoticeUpdateDTO;
-import soomsheo.Telo.dto.ResidentResisterDTO;
 import soomsheo.Telo.service.BuildingService;
 
 import java.security.NoSuchAlgorithmException;
@@ -35,7 +32,7 @@ public class BuildingController {
                     buildingResister.getNumberOfHouseholds(),
                     0,
                     buildingResister.getImageURL(),
-                    buildingResister.getMemberID(),
+                    buildingResister.getLandlordID(),
                     ""
             );
 
@@ -58,9 +55,9 @@ public class BuildingController {
         }
     }
 
-    @GetMapping("/member/{memberID}")
-    public ResponseEntity<List<Building>> getBuildingsByMemberID(@PathVariable String memberID) {
-        List<Building> buildings = buildingService.findByMemberID(memberID);
+    @GetMapping("/member/{landlordID}")
+    public ResponseEntity<List<Building>> getBuildingsByMemberID(@PathVariable String landlordID) {
+        List<Building> buildings = buildingService.findByLandlordID(landlordID);
         if (buildings.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

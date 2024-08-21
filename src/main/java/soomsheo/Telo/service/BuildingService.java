@@ -1,7 +1,6 @@
 package soomsheo.Telo.service;
 
 import org.springframework.stereotype.Service;
-import soomsheo.Telo.domain.Member;
 import soomsheo.Telo.domain.building.Building;
 import soomsheo.Telo.repository.BuildingRepository;
 import soomsheo.Telo.util.EncryptionUtil;
@@ -36,8 +35,8 @@ public class BuildingService {
         }
         return buildings;
     }
-    public List<Building> findByMemberID(String memberID) {
-        return buildingRepository.findByMemberID(memberID);
+    public List<Building> findByLandlordID(String landlordID) {
+        return buildingRepository.findByLandlordID(landlordID);
     }
 
     public Building updateNotice(UUID buildingId, String notice) {

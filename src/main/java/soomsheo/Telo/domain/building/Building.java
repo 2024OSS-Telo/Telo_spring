@@ -4,12 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
-import soomsheo.Telo.domain.Member;
 import soomsheo.Telo.util.EncryptionUtil;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,7 +23,7 @@ public class Building {
     private String encryptedBuildingAddress;
     private int numberOfHouseholds;
     private int numberOfRentedHouseholds;
-    private String memberID;
+    private String landlordID;
 
     private String notice;
 
@@ -36,13 +32,13 @@ public class Building {
     @Column(name = "image_url")
     private List<String> imageURL;
 
-    public Building(String buildingName, String buildingAddress, int numberOfHouseholds, int numberOfRentedHouseholds,List<String> imageURL, String memberID, String notice) throws Exception {
+    public Building(String buildingName, String buildingAddress, int numberOfHouseholds, int numberOfRentedHouseholds, List<String> imageURL, String landlordID, String notice) throws Exception {
         this.buildingID = UUID.randomUUID();
         this.buildingName = buildingName;
         this.encryptedBuildingAddress = EncryptionUtil.encrypt(buildingAddress);
         this.numberOfHouseholds = numberOfHouseholds;
         this.numberOfRentedHouseholds = numberOfRentedHouseholds;
-        this.memberID = memberID;
+        this.landlordID = landlordID;
         this.imageURL = imageURL;
         this.notice = notice;
     }
