@@ -28,14 +28,16 @@ public class RepairRequestService {
         repairRequestRepository.save(repairRequest);
     }
 
-    public void updateClaim(String requestID, Long actualValue, List<String> receiptImageURL, String claimContent) {
+    public RepairRequest updateClaim(String requestID, Long actualValue, List<String> receiptImageURL, String claimContent) {
         Optional<RepairRequest> optionalRepairRequest = repairRequestRepository.findById(requestID);
 
         if (optionalRepairRequest.isPresent()) {
             RepairRequest repairRequest = optionalRepairRequest.get();
             repairRequest.updateClaim(actualValue, receiptImageURL, claimContent);
             repairRequestRepository.save(repairRequest);
+            return repairRequest;
         }
+        return null;
     }
 
     public void updateRepairState(String requestID, RepairRequest.RepairState repairState) {
@@ -48,7 +50,23 @@ public class RepairRequestService {
         }
     }
 
+    public RepairRequest updateRefusalReason(String requestID, String refusalReason) {
+        Optional<RepairRequest> optionalRepairRequest = repairRequestRepository.findById(requestID);
+
+        if (optionalRepairRequest.isPresent()) {
+            RepairRequest repairRequest = optionalRepairRequest.get();
+            repairRequest.updateRefusalReason(refusalReason);
+            repairRequestRepository.save(repairRequest);
+            return repairRequest;
+        }
+        return null;
+    }
+
     public List<RepairRequest> getRepairRequestList(String memberID) {
         return repairRequestRepository.findByTenantID(memberID);
+    }
+
+    public Optional<RepairRequest> getRepairRequest(String requestID) {
+        return repairRequestRepository.findById(requestID);
     }
 }

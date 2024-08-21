@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import soomsheo.Telo.domain.Chat.NoticeMessage;
 import soomsheo.Telo.domain.RepairRequest;
+import soomsheo.Telo.service.ChatService;
 import soomsheo.Telo.service.RepairRequestService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -14,11 +17,13 @@ import java.util.Map;
 @RequestMapping("/api/repair-request")
 public class RepairRequestController {
     private final RepairRequestService repairRequestService;
+    private final ChatService chatService;
     private final ChatWebSocketController chatWebSocketController;
 
     @Autowired
-    public RepairRequestController(RepairRequestService repairRequestService, ChatWebSocketController chatWebSocketController) {
+    public RepairRequestController(RepairRequestService repairRequestService, ChatService chatService, ChatWebSocketController chatWebSocketController) {
         this.repairRequestService = repairRequestService;
+        this.chatService = chatService;
         this.chatWebSocketController = chatWebSocketController;
     }
 
@@ -49,16 +54,34 @@ public class RepairRequestController {
         return repairRequestService.getRepairRequestList(memberID);
     }
 
-    @PostMapping("/claim")
-    public ResponseEntity<String> updateClaim(@RequestBody Map<String, Object> claim) {
+    @PostMapping("{roomID}/claim")
+    public ResponseEntity<String> updateClaim(@RequestBody Map<String, Object> claim, @PathVariable String roomID) {
         try {
             String requestID = (String)claim.get("requestID");
             Long actualValue = ((Integer) claim.get("actualValue")).longValue();
             List<String> receiptImageURL = (List<String>)claim.get("receiptImageURL");
             String claimContent = (String)claim.get("claimContent");
 
-            repairRequestService.updateClaim(requestID, actualValue, receiptImageURL, claimContent);
+            RepairRequest repairRequest = repairRequestService.updateClaim(requestID, actualValue, receiptImageURL, claimContent);
+            NoticeMessage noticeMessage = new NoticeMessage(roomID, repairRequest.getTenantID(), repairRequest, "claim", LocalDateTime.now());
+            chatWebSocketController.handleNoticeMessage(noticeMessage);
             return ResponseEntity.ok("청구 정보 업데이트 성공");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("{roomID}/request-refuse")
+    public ResponseEntity<String> refuseRequest(@RequestBody Map<String, Object> refuse, @PathVariable String roomID) {
+        try {
+            String requestID = (String)refuse.get("requestID");
+            String refusalReason = (String)refuse.get("refusalReason");
+
+            RepairRequest repairRequest = repairRequestService.updateRefusalReason(requestID, refusalReason);
+            NoticeMessage noticeMessage = new NoticeMessage(roomID, repairRequest.getLandlordID(), repairRequest, "refusal", LocalDateTime.now());
+            chatWebSocketController.handleNoticeMessage(noticeMessage);
+            return ResponseEntity.ok("수리 요청 거절 성공");
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

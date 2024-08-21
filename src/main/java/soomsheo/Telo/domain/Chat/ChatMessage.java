@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @DiscriminatorColumn(name = "message_type")
 public class ChatMessage {
     public enum MessageType{
-        TEXT, REPAIR_REQUEST, PHOTO
+        TEXT, REPAIR_REQUEST, PHOTO, NOTICE
     }
 
     @Id

@@ -5,6 +5,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
+import soomsheo.Telo.domain.Chat.NoticeMessage;
 import soomsheo.Telo.domain.Chat.PhotoMessage;
 import soomsheo.Telo.domain.Chat.RequestMessage;
 import soomsheo.Telo.domain.Chat.TextMessage;
@@ -24,15 +25,14 @@ public class ChatWebSocketController {
     @MessageMapping("/chat/{roomID}/text")
     @SendTo("/queue/{roomID}")
     public TextMessage handleTextMessage(@DestinationVariable String roomID, @Payload TextMessage message) {
-        System.out.println("Received message: " + message.getMessage());
-        chatService.sendTextMessage(roomID, message.getSenderID(), message.getMessage());
+        chatService.saveTextMessage(roomID, message.getSenderID(), message.getMessage());
         return message;
     }
 
     @MessageMapping("/chat/{roomID}/photo")
     @SendTo("/queue/{roomID}")
     public PhotoMessage handlePhotoMessage(@DestinationVariable String roomID, @Payload PhotoMessage message) {
-        chatService.sendPhotoMessage(roomID, message.getSenderID(), message.getImageURL());
+        chatService.savePhotoMessage(roomID, message.getSenderID(), message.getImageURL());
         return message;
     }
 
@@ -41,7 +41,14 @@ public class ChatWebSocketController {
     public RequestMessage handleRepairRequest(@Payload RepairRequest repairRequest) {
         String roomID = chatService.getOrCreateChatRoom(repairRequest.getLandlordID(), repairRequest.getTenantID());
         RequestMessage requestMessage = new RequestMessage(roomID, repairRequest.getTenantID(), repairRequest, LocalDateTime.now());
-        chatService.sendRequestMessage(repairRequest);
+        chatService.saveRequestMessage(repairRequest);
         return requestMessage;
+    }
+
+    @MessageMapping("chat/{roomID}/notice")
+    @SendTo("/queue/{roomID}")
+    public NoticeMessage handleNoticeMessage(@Payload NoticeMessage message) {
+        chatService.saveNoticeMessage(message);
+        return message;
     }
 }
