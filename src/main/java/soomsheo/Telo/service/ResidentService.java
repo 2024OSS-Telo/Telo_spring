@@ -47,7 +47,7 @@ public class ResidentService {
             String decryptedPhoneNumber = EncryptionUtil.decrypt(resident.getTenant().getEncryptedPhoneNumber());
 
             ResidentResisterDTO resisterDTO = new ResidentResisterDTO(
-                    resident.getTenant().getMemberRealName(), // or whatever method you have to get the resident name
+                    resident.getTenant().getMemberRealName(),
                     decryptedPhoneNumber,
                     resident.getApartmentNumber(),
                     resident.getRentType(),

@@ -22,7 +22,7 @@ public class BuildingController {
         this.buildingService = buildingService;
     }
 
-    @PostMapping("/building-resister")
+    @PostMapping("/landlord/building-resister")
     public ResponseEntity<Building> createBuilding(@RequestBody BuildingResisterDTO buildingResister) {
         try {
 
@@ -36,7 +36,8 @@ public class BuildingController {
                     ""
             );
 
-            buildingService.saveBuilding(building);
+            buildingService.saveBuilding(building, buildingResister.getMemberRealName(), buildingResister.getPhoneNumber());
+
             return new ResponseEntity<>(building, HttpStatus.CREATED);
         } catch (NoSuchAlgorithmException e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -45,7 +46,7 @@ public class BuildingController {
         }
     }
 
-    @GetMapping("/building-list")
+    @GetMapping("/building-list/landlord")
     public ResponseEntity<List<Building>> getBuildingList() {
         try {
             List<Building> buildingList = buildingService.getAllBuildings();

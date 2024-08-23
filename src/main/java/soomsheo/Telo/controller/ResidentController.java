@@ -29,7 +29,7 @@ public class ResidentController {
         this.memberService = memberService;
     }
 
-    @GetMapping("/resident-list/{buildingID}")
+    @GetMapping("/landlord/resident-list/{buildingID}")
     public ResponseEntity<List<ResidentResisterDTO>> getResidentsByBuildingID(@PathVariable UUID buildingID) throws Exception {
         List<ResidentResisterDTO> residents = residentService.getAllResidents(buildingID);
 //        for (Resident resident : residents) {
@@ -42,7 +42,7 @@ public class ResidentController {
         return ResponseEntity.ok(residents);
     }
 
-    @PostMapping("/resident-resister/{buildingID}/{tenantID}")
+    @PostMapping("/tenant/resident-resister/{buildingID}/{tenantID}")
     public ResponseEntity<Resident> createResident(@PathVariable UUID buildingID, @PathVariable String tenantID, @RequestBody ResidentResisterDTO residentResister) throws Exception {
         Building building = buildingService.findByBuildingID(buildingID);
         Member tenant = memberService.findByMemberID(tenantID);
