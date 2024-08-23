@@ -66,4 +66,9 @@ public class ResidentController {
         residentService.saveResident(resident, residentResister.getResidentName(), residentResister.getPhoneNumber());
         return new ResponseEntity<>(resident, HttpStatus.CREATED);
     }
+
+    @GetMapping("/{tenantID}/{landlordID}")
+    public List<Resident> getResidentsByTenantIdAndLandlordId(@PathVariable String tenantID, @PathVariable String landlordID) {
+        return residentService.getResidentsByTenantIdAndLandlordId(tenantID, landlordID);
+    }
 }

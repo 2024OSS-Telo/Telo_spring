@@ -6,5 +6,5 @@ import soomsheo.Telo.domain.RepairRequest;
 import java.util.List;
 
 public interface RepairRequestRepository extends JpaRepository<RepairRequest, String> {
-    List<RepairRequest> findByTenantID(String tenantID);
+    List<RepairRequest> findByLandlordIDOrTenantID(String landlordID, String tenantID);
 }

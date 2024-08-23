@@ -63,7 +63,7 @@ public class RepairRequestService {
     }
 
     public List<RepairRequest> getRepairRequestList(String memberID) {
-        return repairRequestRepository.findByTenantID(memberID);
+        return repairRequestRepository.findByLandlordIDOrTenantID(memberID, memberID);
     }
 
     public Optional<RepairRequest> getRepairRequest(String requestID) {

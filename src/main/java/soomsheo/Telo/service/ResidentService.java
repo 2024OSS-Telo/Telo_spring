@@ -65,4 +65,12 @@ public class ResidentService {
         }
         return resisterDTOS;
     }
+
+    public List<Building> getBuildingsByTenantIDAndLandlordID (String tenantID, String landlordID) {
+        return residentRepository.findBuildingsByTenantIdAndLandlordId(tenantID, landlordID);
+    }
+
+    public List<Resident> getResidentsByTenantIdAndLandlordId (String tenantID, String landlordID) {
+        return residentRepository.findResidentsByTenantIdAndLandlordId(tenantID, landlordID);
+    }
 }
