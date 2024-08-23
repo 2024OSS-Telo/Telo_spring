@@ -56,11 +56,4 @@ public class Resident {
         this.contractImageURL = contractImageURL;
     }
 
-//    public String getPhoneNumber() throws Exception {
-//        return EncryptionUtil.decrypt(this.encryptedPhoneNumber);
-//    }
-//
-//    public void setPhoneNumber(String phoneNumber) throws Exception {
-//        this.encryptedPhoneNumber = EncryptionUtil.encrypt(phoneNumber);
-//    }
 }

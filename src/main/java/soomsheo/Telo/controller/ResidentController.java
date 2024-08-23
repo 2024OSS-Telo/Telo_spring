@@ -64,6 +64,9 @@ public class ResidentController {
         );
 
         residentService.saveResident(resident, residentResister.getResidentName(), residentResister.getPhoneNumber());
+
+        buildingService.incrementRentedHouseholds(buildingID);
+
         return new ResponseEntity<>(resident, HttpStatus.CREATED);
     }
 

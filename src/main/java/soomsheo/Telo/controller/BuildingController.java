@@ -30,7 +30,7 @@ public class BuildingController {
                     buildingResister.getBuildingName(),
                     buildingResister.getBuildingAddress(),
                     buildingResister.getNumberOfHouseholds(),
-                    0,
+                    buildingResister.getNumberOfRentedHouseholds(),
                     buildingResister.getImageURL(),
                     buildingResister.getLandlordID(),
                     ""
@@ -85,4 +85,5 @@ public class BuildingController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }

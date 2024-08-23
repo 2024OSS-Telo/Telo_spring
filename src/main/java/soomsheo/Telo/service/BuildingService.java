@@ -66,4 +66,12 @@ public class BuildingService {
     public Optional<Building> getBuildingById(UUID buildingID) {
         return Optional.ofNullable(buildingRepository.findByBuildingID(buildingID));
     }
+
+    public void incrementRentedHouseholds(UUID buildingID) {
+        Building building = findByBuildingID(buildingID);
+        if (building != null) {
+            building.setNumberOfRentedHouseholds(building.getNumberOfRentedHouseholds() + 1);
+            buildingRepository.save(building);
+        }
+    }
 }
