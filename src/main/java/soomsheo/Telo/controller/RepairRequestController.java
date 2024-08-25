@@ -3,8 +3,10 @@ package soomsheo.Telo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import soomsheo.Telo.domain.Chat.NoticeMessage;
+import soomsheo.Telo.domain.Chat.RequestMessage;
 import soomsheo.Telo.domain.RepairRequest;
 import soomsheo.Telo.service.ChatService;
 import soomsheo.Telo.service.RepairRequestService;
@@ -16,6 +18,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/repair-request")
 public class RepairRequestController {
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
     private final RepairRequestService repairRequestService;
     private final ChatService chatService;
     private final ChatWebSocketController chatWebSocketController;
@@ -38,8 +43,12 @@ public class RepairRequestController {
                     request.getImageURL(),
                     request.getEstimatedValue());
 
+
             repairRequestService.createRepairRequest(repairRequest);
-            chatWebSocketController.handleRepairRequest(repairRequest);
+            String roomID = chatService.getOrCreateChatRoom(repairRequest.getLandlordID(), repairRequest.getTenantID());
+            RequestMessage requestMessage = new RequestMessage(roomID, repairRequest.getTenantID(), repairRequest, LocalDateTime.now());
+            chatService.saveRequestMessage(repairRequest);
+            messagingTemplate.convertAndSend("/queue/" + roomID, requestMessage);
 
             return ResponseEntity.ok("수리 요청 등록 성공");
         } catch (Exception e) {
@@ -64,7 +73,10 @@ public class RepairRequestController {
 
             RepairRequest repairRequest = repairRequestService.updateClaim(requestID, actualValue, receiptImageURL, claimContent);
             NoticeMessage noticeMessage = new NoticeMessage(roomID, repairRequest.getTenantID(), repairRequest, "claim", LocalDateTime.now());
-            chatWebSocketController.handleNoticeMessage(noticeMessage);
+
+            chatService.saveNoticeMessage(noticeMessage);
+            messagingTemplate.convertAndSend("/queue/" + roomID, noticeMessage);
+
             return ResponseEntity.ok("청구 정보 업데이트 성공");
         } catch (Exception e) {
             e.printStackTrace();
@@ -80,7 +92,10 @@ public class RepairRequestController {
 
             RepairRequest repairRequest = repairRequestService.updateRefusalReason(requestID, refusalReason);
             NoticeMessage noticeMessage = new NoticeMessage(roomID, repairRequest.getLandlordID(), repairRequest, "refusal", LocalDateTime.now());
-            chatWebSocketController.handleNoticeMessage(noticeMessage);
+
+            chatService.saveNoticeMessage(noticeMessage);
+            messagingTemplate.convertAndSend("/queue/" + roomID, noticeMessage);
+
             return ResponseEntity.ok("수리 요청 거절 성공");
         } catch (Exception e) {
             e.printStackTrace();

@@ -23,20 +23,8 @@ public class MemberController {
     }
 
     @GetMapping("/{memberID}")
-    public ResponseEntity<?> getLandlordDetails(@PathVariable String memberID) {
-        try {
-            Member member = memberService.findByMemberID(memberID);
-            if (member == null) {
-                return ResponseEntity.notFound().build();
-            }
-
-            return ResponseEntity.ok().body(Map.of(
-                    "memberRealName", member.getMemberRealName(),
-                    "phoneNumber", member.getPhoneNumber()
-            ));
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("서버 에러: " + e.getMessage());
-        }
+    public Member getMember(@PathVariable String memberID) {
+        return memberService.findByMemberID(memberID);
     }
 
     @PostMapping("/updateMemberType/{memberID}")
