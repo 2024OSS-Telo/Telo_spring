@@ -30,6 +30,7 @@ public class MemberController {
                 return ResponseEntity.notFound().build();
             }
 
+            System.out.print("landlord member check: " + member.getMemberRealName() + member.getPhoneNumber());
             return ResponseEntity.ok().body(Map.of(
                     "memberRealName", member.getMemberRealName(),
                     "phoneNumber", member.getPhoneNumber()

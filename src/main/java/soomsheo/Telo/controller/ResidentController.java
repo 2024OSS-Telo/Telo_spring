@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import soomsheo.Telo.domain.Member;
 import soomsheo.Telo.domain.building.Building;
 import soomsheo.Telo.domain.building.Resident;
+import soomsheo.Telo.dto.ResidentDTO;
 import soomsheo.Telo.dto.ResidentResisterDTO;
 import soomsheo.Telo.service.BuildingService;
 import soomsheo.Telo.service.MemberService;
@@ -32,14 +33,21 @@ public class ResidentController {
     @GetMapping("/landlord/resident-list/{buildingID}")
     public ResponseEntity<List<ResidentResisterDTO>> getResidentsByBuildingID(@PathVariable UUID buildingID) throws Exception {
         List<ResidentResisterDTO> residents = residentService.getAllResidents(buildingID);
-//        for (Resident resident : residents) {
-//            System.out.println("PhoneNumber: " + resident.getPhoneNumber());
-//        }
 
         if (residents.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(residents);
+    }
+
+    @GetMapping("/tenant/resident-list/{tenantID}")
+    public ResponseEntity<List<ResidentDTO>> getResidentsByMemberID(@PathVariable String tenantID) {
+        try {
+            List<ResidentDTO> residentDTOs = residentService.getResidentsByMemberID(tenantID);
+            return ResponseEntity.ok(residentDTOs);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     @PostMapping("/tenant/resident-resister/{buildingID}/{tenantID}")
