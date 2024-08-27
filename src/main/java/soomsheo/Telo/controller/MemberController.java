@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import soomsheo.Telo.domain.Member;
+import soomsheo.Telo.dto.MemberDTO;
 import soomsheo.Telo.dto.MemberTypeUpdateRequestDTO;
 import soomsheo.Telo.service.MemberService;
 
@@ -23,8 +24,17 @@ public class MemberController {
     }
 
     @GetMapping("/{memberID}")
-    public Member getMember(@PathVariable String memberID) {
-        return memberService.findByMemberID(memberID);
+    public MemberDTO getMember(@PathVariable String memberID) throws Exception {
+        Member member = memberService.findByMemberID(memberID);
+        return new MemberDTO(
+                member.getMemberID(),
+                member.getMemberRealName(),
+                member.getMemberNickName(),
+                member.getPhoneNumber(),
+                member.getProfile(),
+                member.getProvider(),
+                member.getMemberType()
+        );
     }
 
     @PostMapping("/updateMemberType/{memberID}")

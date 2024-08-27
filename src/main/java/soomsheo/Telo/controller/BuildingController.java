@@ -49,16 +49,6 @@ public class BuildingController {
         }
     }
 
-//    @GetMapping("/building-list/landlord")
-//    public ResponseEntity<List<Building>> getBuildingList() {
-//        try {
-//            List<Building> buildingList = buildingService.getAllBuildings();
-//            return new ResponseEntity<>(buildingList, HttpStatus.OK);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
-
     @GetMapping("/landlord/building-list/{landlordID}")
     public ResponseEntity<List<Building>> getBuildingsByLandlordID(@PathVariable String landlordID) {
         List<Building> buildings = buildingService.findByLandlordID(landlordID);
