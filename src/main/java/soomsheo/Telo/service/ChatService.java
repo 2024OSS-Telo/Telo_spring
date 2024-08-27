@@ -67,5 +67,7 @@ public class ChatService {
             return chatRoomOpt.get().getRoomID();
     }
 
-
+    public ChatRoom findByRoomID(String roomID) {
+        return chatRoomRepository.findByRoomID(roomID);
+    }
 }

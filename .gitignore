@@ -37,3 +37,6 @@ out/
 .vscode/
 
 !**/src/main/java/soomsheo/Telo/util/
+
+### key ###
+src/main/resources/firebase/telo-firebase-key.json
