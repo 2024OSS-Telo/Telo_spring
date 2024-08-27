@@ -18,6 +18,10 @@ public class EncryptionUtil {
     }
 
     public static String encrypt(String data) throws Exception {
+        if (data == null) {
+            return null;
+        }
+
         Cipher cipher = Cipher.getInstance(TRANSFORMATION);
         cipher.init(Cipher.ENCRYPT_MODE, secretKey);
         byte[] encryptedBytes = cipher.doFinal(data.getBytes());
@@ -25,6 +29,10 @@ public class EncryptionUtil {
     }
 
     public static String decrypt(String encryptedData) throws Exception {
+        if (encryptedData == null) {
+            return null;
+        }
+
         Cipher cipher = Cipher.getInstance(TRANSFORMATION);
         cipher.init(Cipher.DECRYPT_MODE, secretKey);
         byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encryptedData));
