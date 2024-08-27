@@ -88,6 +88,7 @@ public class ResidentService {
                     resident.getDeposit(),
                     resident.getContractExpirationDate(),
                     resident.getContractImageURL(),
+                    resident.getBuilding(),
                     building.getBuildingID(),
                     building.getBuildingName(),
                     buildingAddress,
