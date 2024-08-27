@@ -21,6 +21,7 @@ public class Member {
     private String profile;
     private String provider; // google, kakao
     private String memberType; // landlord, tenant
+    private String token; // device token
 
     public String getPhoneNumber() throws Exception {
         return EncryptionUtil.decrypt(this.encryptedPhoneNumber);

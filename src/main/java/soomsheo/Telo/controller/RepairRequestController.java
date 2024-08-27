@@ -9,6 +9,7 @@ import soomsheo.Telo.domain.Chat.NoticeMessage;
 import soomsheo.Telo.domain.Chat.RequestMessage;
 import soomsheo.Telo.domain.RepairRequest;
 import soomsheo.Telo.service.ChatService;
+import soomsheo.Telo.service.FcmService;
 import soomsheo.Telo.service.RepairRequestService;
 
 import java.time.LocalDateTime;
@@ -25,11 +26,14 @@ public class RepairRequestController {
     private final ChatService chatService;
     private final ChatWebSocketController chatWebSocketController;
 
+    private final FcmService fcmService;
+
     @Autowired
-    public RepairRequestController(RepairRequestService repairRequestService, ChatService chatService, ChatWebSocketController chatWebSocketController) {
+    public RepairRequestController(RepairRequestService repairRequestService, ChatService chatService, ChatWebSocketController chatWebSocketController, FcmService fcmService) {
         this.repairRequestService = repairRequestService;
         this.chatService = chatService;
         this.chatWebSocketController = chatWebSocketController;
+        this.fcmService = fcmService;
     }
 
     @PostMapping
@@ -77,6 +81,8 @@ public class RepairRequestController {
             chatService.saveNoticeMessage(noticeMessage);
             messagingTemplate.convertAndSend("/queue/" + roomID, noticeMessage);
 
+            fcmService.sendPushNotification(roomID, noticeMessage);
+
             return ResponseEntity.ok("청구 정보 업데이트 성공");
         } catch (Exception e) {
             e.printStackTrace();
@@ -95,6 +101,8 @@ public class RepairRequestController {
 
             chatService.saveNoticeMessage(noticeMessage);
             messagingTemplate.convertAndSend("/queue/" + roomID, noticeMessage);
+
+            fcmService.sendPushNotification(roomID, noticeMessage);
 
             return ResponseEntity.ok("수리 요청 거절 성공");
         } catch (Exception e) {
