@@ -5,7 +5,7 @@ import soomsheo.Telo.domain.Member;
 import soomsheo.Telo.domain.building.Building;
 import soomsheo.Telo.domain.building.Resident;
 import soomsheo.Telo.dto.ResidentDTO;
-import soomsheo.Telo.dto.ResidentResisterDTO;
+import soomsheo.Telo.dto.ResidentRegisterDTO;
 import soomsheo.Telo.repository.BuildingRepository;
 import soomsheo.Telo.repository.MemberRepository;
 import soomsheo.Telo.repository.ResidentRepository;
@@ -42,14 +42,14 @@ public class ResidentService {
         return residentRepository.findByResidentID(residentID);
     }
 
-    public List<ResidentResisterDTO> getAllResidents(UUID buildingID) throws Exception {
+    public List<ResidentRegisterDTO> getAllResidents(UUID buildingID) throws Exception {
         List<Resident> residents = residentRepository.findByBuilding_BuildingID(buildingID);
-        List<ResidentResisterDTO> resisterDTOS = new ArrayList<>();
+        List<ResidentRegisterDTO> resisterDTOS = new ArrayList<>();
 
         for (Resident resident : residents) {
             String decryptedPhoneNumber = EncryptionUtil.decrypt(resident.getTenant().getEncryptedPhoneNumber());
 
-            ResidentResisterDTO resisterDTO = new ResidentResisterDTO(
+            ResidentRegisterDTO resisterDTO = new ResidentRegisterDTO(
                     resident.getTenant().getMemberRealName(),
                     decryptedPhoneNumber,
                     resident.getApartmentNumber(),

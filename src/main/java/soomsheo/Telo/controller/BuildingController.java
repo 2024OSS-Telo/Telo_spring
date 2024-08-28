@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import soomsheo.Telo.domain.Member;
 import soomsheo.Telo.domain.building.Building;
-import soomsheo.Telo.dto.BuildingResisterDTO;
+import soomsheo.Telo.dto.BuildingRegisterDTO;
 import soomsheo.Telo.dto.NoticeUpdateDTO;
 import soomsheo.Telo.service.BuildingService;
 import soomsheo.Telo.service.MemberService;
@@ -25,21 +25,21 @@ public class BuildingController {
         this.memberService = memberService;
     }
 
-    @PostMapping("/landlord/building-resister")
-    public ResponseEntity<Building> createBuilding(@RequestBody BuildingResisterDTO buildingResister) {
+    @PostMapping("/landlord/building-register")
+    public ResponseEntity<Building> createBuilding(@RequestBody BuildingRegisterDTO buildingRegister) {
         try {
 
             Building building = new Building(
-                    buildingResister.getBuildingName(),
-                    buildingResister.getBuildingAddress(),
-                    buildingResister.getNumberOfHouseholds(),
-                    buildingResister.getNumberOfRentedHouseholds(),
-                    buildingResister.getImageURL(),
-                    buildingResister.getLandlordID(),
+                    buildingRegister.getBuildingName(),
+                    buildingRegister.getBuildingAddress(),
+                    buildingRegister.getNumberOfHouseholds(),
+                    buildingRegister.getNumberOfRentedHouseholds(),
+                    buildingRegister.getImageURL(),
+                    buildingRegister.getLandlordID(),
                     ""
             );
 
-            buildingService.saveBuilding(building, buildingResister.getMemberRealName(), buildingResister.getPhoneNumber());
+            buildingService.saveBuilding(building, buildingRegister.getMemberRealName(), buildingRegister.getPhoneNumber());
 
             return new ResponseEntity<>(building, HttpStatus.CREATED);
         } catch (NoSuchAlgorithmException e) {

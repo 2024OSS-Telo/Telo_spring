@@ -12,7 +12,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BuildingResisterDTO {
+public class BuildingRegisterDTO {
     private UUID buildingID;
     private String buildingName;
     private String buildingAddress;

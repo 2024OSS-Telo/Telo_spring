@@ -2,18 +2,16 @@ package soomsheo.Telo.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import soomsheo.Telo.domain.Member;
 import soomsheo.Telo.domain.building.Building;
 import soomsheo.Telo.domain.building.Resident;
 import soomsheo.Telo.dto.ResidentDTO;
-import soomsheo.Telo.dto.ResidentResisterDTO;
+import soomsheo.Telo.dto.ResidentRegisterDTO;
 import soomsheo.Telo.service.BuildingService;
 import soomsheo.Telo.service.MemberService;
 import soomsheo.Telo.service.ResidentService;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,8 +29,8 @@ public class ResidentController {
     }
 
     @GetMapping("/landlord/resident-list/{buildingID}")
-    public ResponseEntity<List<ResidentResisterDTO>> getResidentsByBuildingID(@PathVariable UUID buildingID) throws Exception {
-        List<ResidentResisterDTO> residents = residentService.getAllResidents(buildingID);
+    public ResponseEntity<List<ResidentRegisterDTO>> getResidentsByBuildingID(@PathVariable UUID buildingID) throws Exception {
+        List<ResidentRegisterDTO> residents = residentService.getAllResidents(buildingID);
 
         if (residents.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -50,8 +48,8 @@ public class ResidentController {
         }
     }
 
-    @PostMapping("/tenant/resident-resister/{buildingID}/{tenantID}")
-    public ResponseEntity<Resident> createResident(@PathVariable UUID buildingID, @PathVariable String tenantID, @RequestBody ResidentResisterDTO residentResister) throws Exception {
+    @PostMapping("/tenant/resident-register/{buildingID}/{tenantID}")
+    public ResponseEntity<Resident> createResident(@PathVariable UUID buildingID, @PathVariable String tenantID, @RequestBody ResidentRegisterDTO residentRegister) throws Exception {
         Building building = buildingService.findByBuildingID(buildingID);
         Member tenant = memberService.findByMemberID(tenantID);
 
@@ -61,17 +59,17 @@ public class ResidentController {
 
         Resident resident = new Resident(
                 tenant,
-                residentResister.getApartmentNumber(),
-                residentResister.getRentType(),
-                residentResister.getMonthlyRentAmount(),
-                residentResister.getMonthlyRentPaymentDate(),
-                residentResister.getDeposit(),
-                residentResister.getContractExpirationDate(),
+                residentRegister.getApartmentNumber(),
+                residentRegister.getRentType(),
+                residentRegister.getMonthlyRentAmount(),
+                residentRegister.getMonthlyRentPaymentDate(),
+                residentRegister.getDeposit(),
+                residentRegister.getContractExpirationDate(),
                 building,
-                residentResister.getContractImageURL()
+                residentRegister.getContractImageURL()
         );
 
-        residentService.saveResident(resident, residentResister.getResidentName(), residentResister.getPhoneNumber());
+        residentService.saveResident(resident, residentRegister.getResidentName(), residentRegister.getPhoneNumber());
 
         buildingService.incrementRentedHouseholds(buildingID);
 

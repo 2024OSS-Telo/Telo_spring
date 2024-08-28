@@ -13,7 +13,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResidentResisterDTO {
+public class ResidentRegisterDTO {
     private String residentName;
     private String phoneNumber;
     private String apartmentNumber;
