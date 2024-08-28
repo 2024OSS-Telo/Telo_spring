@@ -44,12 +44,12 @@ public class ResidentService {
 
     public List<ResidentRegisterDTO> getAllResidents(UUID buildingID) throws Exception {
         List<Resident> residents = residentRepository.findByBuilding_BuildingID(buildingID);
-        List<ResidentRegisterDTO> resisterDTOS = new ArrayList<>();
+        List<ResidentRegisterDTO> registerDTOS = new ArrayList<>();
 
         for (Resident resident : residents) {
             String decryptedPhoneNumber = EncryptionUtil.decrypt(resident.getTenant().getEncryptedPhoneNumber());
 
-            ResidentRegisterDTO resisterDTO = new ResidentRegisterDTO(
+            ResidentRegisterDTO registerDTO = new ResidentRegisterDTO(
                     resident.getTenant().getMemberRealName(),
                     decryptedPhoneNumber,
                     resident.getApartmentNumber(),
@@ -62,11 +62,11 @@ public class ResidentService {
                     resident.getContractImageURL()
             );
 
-            resisterDTOS.add(resisterDTO);
+            registerDTOS.add(registerDTO);
 
             System.out.println("fuction running....... ");
         }
-        return resisterDTOS;
+        return registerDTOS;
     }
 
     public List<ResidentDTO> getResidentsByMemberID(String memberID) throws Exception {
